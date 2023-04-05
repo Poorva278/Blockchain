@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+<style>
+    body {
+    background-color: #f7f7f7;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  
+  
+  .container {
+    margin: 0 auto;
+    max-width: 600px;
+    padding: 20px;
+  }
+  
+  
+  
+  form {
+    background-color: #ffffff;
+    border: 1px solid #d0d0d0;
+    padding: 20px;
+  }
+  
+  
+  
+  input[type="text"], input[type="password"] {
+    border: 1px solid #d0d0d0;
+    padding: 10px;
+    width: 100%;
+  }
+  
+  
+  
+  button {
+    background-color: #4caf50;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 10px;
+  }
+  
+  
+  
+  button:hover {
+    background-color: #3e8e41;
+  }
+  
+
+  body {
+
+    background-image: url('images/sports-faith-background.jpg');
+
+    background-size: cover;
+
+  }
+  
+  
+  .message {
+    color: red;
+    margin-top: 10px;
+  }
+
+  
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Login</h1>
+
+<form method="post" action="/login">
+<div>
+<label for="username">Username</label>
+<input type="text" name="username" id="username" required>
+</div>
+<div>
+<label for="password">Password</label>
+<input type="password" name="password" id="password" required>
+</div>
+<button type="submit" onclick="connectMetamask()">Login</button>
+</form>
+<script>
+
+let account;
+                const connectMetamask = async () => {
+                    if (window.ethereum !== "undefined") {
+                        const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+                        account = accounts[0];
+                        document.getElementById("userArea").innerHTML = `User Account: ${account}`;
+                    }
+                }
+
+                const connectContract = async () => {
+                    const ABI = [
+	{
+		"inputs": [],
+		"name": "deposit",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAddress",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getBalance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address payable",
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "withdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+];
+                    const Address = "0xa5d04a3fa82420Ba4e0264De8957373bCD2a46B6"; // Taking Address from Remix 
+                    window.web3 = await new Web3(window.ethereum);
+                    window.contract = await new window.web3.eth.Contract(ABI, Address);
+                    document.getElementById("contractArea").innerHTML = "Connected to Contract"; // calling the elementID above
+                }
+</script>
+</div>
+</body>
+</html>
