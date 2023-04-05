@@ -842,12 +842,12 @@ button:hover {
     <tbody>
       <tr>
         <td>Bitcoin</td>
-        <td>$28426.20</td>
+        <td id="btc-price"></td>
         
       </tr>
       <tr>
         <td>Ethereum</td>
-        <td>$1910.77</td>
+        <td id="eth-price"></td>
       
       </tr>
       
@@ -976,16 +976,15 @@ button:hover {
             <div class="item" style="text-align: center; margin: 0 10px; width: 35%;>
                 <i class="bx bxs-badge-dollar bx-lg"></i>
                 <h3>Send ETH</h3>
+                <input type="number" id="depositInput" placeholder="Enter Amount"><br> <br>
                 <button onclick="depositContract()">Send ether to the Contract</button><br>
-      <input type="number" id="depositInput" placeholder="Enter Amount"><br> <br>
             </div>
             <div class="item" style="text-align: center; margin: 0 10px; width: 35%;>
                 <i class="bx bxs-building-house bx-lg"></i>
                 <h3>Withdrawal</h3>
-   
-          <button onclick="withdraw()">WITHDRAW ETHER TO ANY ADDRESS</button> <br>
           <input type="text" id="addressInput" placeholder="Enter Address"> <br>
           <input type="number" id="amountInput" placeholder="Enter Amount"><br>
+          <button onclick="withdraw()">WITHDRAW ETHER TO ANY ADDRESS</button>
             </div>
       </div>
 </div>
@@ -1163,6 +1162,20 @@ const withdraw = async () => {
     const address = document.getElementById("addressInput").value;
     await window.contract.methods.withdraw(address, amount).send({ from: account });
 }
+
+const btcPriceEl = document.querySelector('#btc-price');
+const ethPriceEl = document.querySelector('#eth-price');
+
+fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd')
+  .then(response => response.json())
+  .then(data => {
+    const btcPrice = data.bitcoin.usd;
+    const ethPrice = data.ethereum.usd;
+    btcPriceEl.textContent = '$' + btcPrice.toLocaleString();
+    ethPriceEl.textContent = '$' + ethPrice.toLocaleString();
+  })
+  .catch(error => console.error(error));
+
     </script>
    
 </body>
